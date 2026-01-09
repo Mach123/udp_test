@@ -71,15 +71,44 @@ python3 grap_lap.py <logfile>
 
 ## 使用例
 
-受信側で起動:
+### 片道測定
+
+受信側（Host B）で起動:
 ```bash
 ./udp_rx -p 44444
 ```
 
-送信側で実行:
+送信側（Host A）で実行:
 ```bash
-./udp_tx -d 192.168.0.100 -p 44444 -o 1000 -c 10
+# Raw socketを使用するためroot権限が必要
+sudo ./udp_tx -d 192.168.0.100 -p 44444 -o 1000 -c 10
 ```
+
+### 往復測定 (RTT)
+
+中継側（Host B）で起動:
+```bash
+./udp_trx -d 192.168.0.1 -p 44444
+```
+
+送信側（Host A）で受信プログラムを起動:
+```bash
+./udp_rx -p 44444
+```
+
+送信側（Host A）で送信を実行:
+```bash
+# Raw socketを使用するためroot権限が必要
+sudo ./udp_tx -d 192.168.0.100 -p 44444 -o 1000 -c 10
+```
+
+### 権限に関する注意
+
+| プログラム | root権限 | 理由 |
+|-----------|---------|------|
+| udp_tx | **必要** (sudo) | Raw socket (IPPROTO_RAW) を使用してIPヘッダを直接操作 |
+| udp_rx | 不要 | 通常のUDPソケット (SOCK_DGRAM) を使用 |
+| udp_trx | 不要 | 通常のUDPソケット (SOCK_DGRAM) を使用 |
 
 ## パケットフォーマット
 
