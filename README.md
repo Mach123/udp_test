@@ -15,8 +15,10 @@ make
 UDPパケットを送信するプログラムです。Raw socketを使用してIPヘッダを含めたパケットを生成します。
 
 ```bash
-./udp_tx [options]
+sudo ./udp_tx [options]
 ```
+
+> **注意:** Raw socket (IPPROTO_RAW) を使用するため、root権限が必要です。
 
 **オプション:**
 - `-s IP4_ADDRESS` : 送信元アドレス (デフォルト: 0.0.0.0)
